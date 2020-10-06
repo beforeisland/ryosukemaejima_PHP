@@ -69,6 +69,13 @@ function makeLink($value) {
 	return mb_ereg_replace("(https?)(://[[:alnum:]\+\$\;\?\.%,!#~*/:@&=_-]+)", '<a href="\1\2">\1\2</a>', $value);
 }
 
+//いいねの取得
+$good = $db->prepare('SELECT p.id, p.member_id, g.* FROM posts p, good g WHERE p.id=g.post_id AND p.id=?');
+
+//いいね数の取得
+$goodCounts = $db->prepare('SELECT COUNT(post_id) AS goodcnt FROM good WHERE post_id=?');
+
+
 ?>
 
 <!DOCTYPE html>
@@ -128,6 +135,14 @@ function makeLink($value) {
 					[<a href="delete.php?id=<?php echo h($post['id']); ?>" style="color:#F33;">削除</a>]
 					<?php endif; ?>
                 </p>
+				<span>
+					いいね: 
+					<?php
+						$goodCounts->execute(array($post['id']));
+						$goodCount = $goodCounts->fetch();
+						echo $goodCount['goodcnt'];
+					?> 
+				</span>
             </div>
             <?php
 			endforeach;
