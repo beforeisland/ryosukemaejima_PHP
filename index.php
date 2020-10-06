@@ -70,7 +70,7 @@ function makeLink($value) {
 }
 
 //いいねの取得
-$good = $db->prepare('SELECT p.id, p.member_id, g.* FROM posts p, good g WHERE p.id=g.post_id AND p.id=?');
+$goods = $db->prepare('SELECT p.id, g.member_id, g.post_id FROM posts p, good g WHERE p.id=g.post_id AND p.id=?');
 
 //いいね数の取得
 $goodCounts = $db->prepare('SELECT COUNT(post_id) AS goodcnt FROM good WHERE post_id=?');
@@ -136,7 +136,17 @@ $goodCounts = $db->prepare('SELECT COUNT(post_id) AS goodcnt FROM good WHERE pos
 					<?php endif; ?>
                 </p>
 				<span>
-					いいね: 
+						<?php 
+						$goods->execute(array($post['id']));
+						$good = $goods->fetch();
+						//「ログイン者か否か、その投稿にいいねが存在しているか」の条件文
+						if((($_SESSION['id'] ?? FALSE) == ($good['member_id'] ?? FALSE)) && (($good['post_id'] ?? FALSE) == ($post['id'] ?? FALSE))): ?>
+
+						<a href="#">いいね:</a>
+						
+						<?php else: ?>
+						いいね:
+						<?php endif ?>
 					<?php
 						$goodCounts->execute(array($post['id']));
 						$goodCount = $goodCounts->fetch();
