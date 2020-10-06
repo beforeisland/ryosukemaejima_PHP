@@ -70,7 +70,7 @@ function makeLink($value) {
 }
 
 //いいねの取得
-$goods = $db->prepare('SELECT p.id, g.member_id, g.post_id FROM posts p, good g WHERE p.id=g.post_id AND p.id=?');
+$goods = $db->prepare('SELECT p.id, g.good_id, g.member_id, g.post_id FROM posts p, good g WHERE p.id=g.post_id AND p.id=? AND g.member_id=?');
 
 //いいね数の取得
 $goodCounts = $db->prepare('SELECT COUNT(post_id) AS goodcnt FROM good WHERE post_id=?');
@@ -137,15 +137,17 @@ $goodCounts = $db->prepare('SELECT COUNT(post_id) AS goodcnt FROM good WHERE pos
                 </p>
 				<span>
 						<?php 
-						$goods->execute(array($post['id']));
+						$goods->execute(array($post['id'], $_SESSION['id']));
 						$good = $goods->fetch();
-						//「ログイン者か否か、その投稿にいいねが存在しているか」の条件文
-						if((($_SESSION['id'] ?? FALSE) == ($good['member_id'] ?? FALSE)) && (($good['post_id'] ?? FALSE) == ($post['id'] ?? FALSE))): ?>
+						
+						if((($_SESSION['id'] ?? FALSE) == ($good['member_id'] ?? FALSE)) && (($good['post_id'] ?? FALSE) == ($post['id'] ?? FALSE))): 
+							// 「ログイン者か否か、その投稿にいいねが存在しているか」条件文 ?> 
+						
 
-						<a href="#">いいね:</a>
+							<a style="color:#F33;" href="good_delete.php?id=<?php echo h($good['good_id']); ?>">いいね:</a>
 						
 						<?php else: ?>
-						いいね:
+						<a style="color:#106eb7;" href="#">いいね:</a>
 						<?php endif ?>
 					<?php
 						$goodCounts->execute(array($post['id']));
