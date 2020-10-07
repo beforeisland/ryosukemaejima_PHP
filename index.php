@@ -76,8 +76,13 @@ $goods = $db->prepare('SELECT p.id, g.good_id, g.member_id, g.post_id FROM posts
 $goodCounts = $db->prepare('SELECT COUNT(post_id) AS goodcnt FROM good WHERE post_id=?');
 
 //リツイート投稿のリツイート者名の取得
-$rtMembers = $db->prepare('SELECT m.name, p.* FROM posts p LEFT JOIN members m ON p.rt_member_id=m.id AND p.id=?')
+$rtMembers = $db->prepare('SELECT m.name, p.* FROM posts p LEFT JOIN members m ON p.rt_member_id=m.id AND p.id=?');
 
+//リツイート投稿のリツイート数の取得
+$rtCounts = $db->prepare('SELECT COUNT(rt_post_id) AS rtcnt FROM posts WHERE rt_post_id=?');
+
+//リツイート元投稿のリツイート数の取得
+$originalRtCounts = $db->prepare('SELECT COUNT(rt_post_id) AS ortcnt FROM posts WHERE rt_post_id=?');
 
 
 ?>
@@ -164,10 +169,31 @@ $rtMembers = $db->prepare('SELECT m.name, p.* FROM posts p LEFT JOIN members m O
 						<a style="color:#106eb7;" href="good_insert.php?post_id=<?php echo h($post['id']); ?>">いいね:</a>
 						<?php endif ?>
 					<?php
+						//いいね数カウント
 						$goodCounts->execute(array($post['id']));
 						$goodCount = $goodCounts->fetch();
 						echo $goodCount['goodcnt'];
 					?> 
+				</span>
+				<span>
+					リツイート: 
+						<?php
+						//リツイート投稿に対するリツイート数取得
+						$rtCounts->execute(array($post['rt_post_id']));
+						$rtCount = $rtCounts->fetch();
+						
+						//リツイート元投稿に対するリツイート数取得
+						$originalRtCounts->execute(array($post['id']));
+						$originalRtCount = $originalRtCounts->fetch();
+
+						//リツイート数カウント
+						//リツイート投稿か否か
+						if($post['rt_post_id'] > 0) {
+							echo $rtCount['rtcnt'];
+						} else {
+							echo $originalRtCount['ortcnt'];
+						}
+						?>
 				</span>
 				
             </div>
