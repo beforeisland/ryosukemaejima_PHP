@@ -75,6 +75,8 @@ $goods = $db->prepare('SELECT p.id, g.good_id, g.member_id, g.post_id FROM posts
 //いいね数の取得
 $goodCounts = $db->prepare('SELECT COUNT(post_id) AS goodcnt FROM good WHERE post_id=?');
 
+//
+
 
 ?>
 
