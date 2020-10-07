@@ -75,7 +75,9 @@ $goods = $db->prepare('SELECT p.id, g.good_id, g.member_id, g.post_id FROM posts
 //いいね数の取得
 $goodCounts = $db->prepare('SELECT COUNT(post_id) AS goodcnt FROM good WHERE post_id=?');
 
-//
+//リツイート投稿のリツイート者名の取得
+$rtMembers = $db->prepare('SELECT m.name, p.* FROM posts p LEFT JOIN members m ON p.rt_member_id=m.id AND p.id=?')
+
 
 
 ?>
@@ -120,6 +122,16 @@ $goodCounts = $db->prepare('SELECT COUNT(post_id) AS goodcnt FROM good WHERE pos
 			foreach($posts as $post):
 			?>
             <div class="msg">
+
+				<?php 
+				$rtMembers->execute(array($post['id']));
+				$rtMember= $rtMembers->fetch();
+				//リツイート投稿者の表示
+				if($post['rt_post_id'] > 0):
+				?>
+					<p><?php echo h($rtMember['name']); ?>さんがリツイート</p>
+				<?php endif; ?>
+
                 <img src="member_picture/<?php echo h($post['picture']); ?>" width="48"
                     height="48" alt="<?php echo h($post['name']); ?>">
                 <p>
@@ -157,6 +169,7 @@ $goodCounts = $db->prepare('SELECT COUNT(post_id) AS goodcnt FROM good WHERE pos
 						echo $goodCount['goodcnt'];
 					?> 
 				</span>
+				
             </div>
             <?php
 			endforeach;
