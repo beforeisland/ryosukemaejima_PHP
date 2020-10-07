@@ -144,10 +144,10 @@ $goodCounts = $db->prepare('SELECT COUNT(post_id) AS goodcnt FROM good WHERE pos
 							// 「ログイン者か否か、その投稿にいいねが存在しているか」条件文 ?> 
 						
 
-							<a style="color:#F33;" href="good_delete.php?id=<?php echo h($good['good_id']); ?>">いいね:</a>
+							<a style="color:#F33;" href="good_delete.php?good_id=<?php echo h($good['good_id']); ?>">いいね:</a>
 						
 						<?php else: ?>
-						<a style="color:#106eb7;" href="#">いいね:</a>
+						<a style="color:#106eb7;" href="good_insert.php?post_id=<?php echo h($post['id']); ?>">いいね:</a>
 						<?php endif ?>
 					<?php
 						$goodCounts->execute(array($post['id']));

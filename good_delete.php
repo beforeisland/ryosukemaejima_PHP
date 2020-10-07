@@ -3,17 +3,17 @@ session_start();
 require('dbconnect.php');
 
 if (isset($_SESSION['id'])) {
-	$id = $_REQUEST['id'];
+	$good_id = $_REQUEST['good_id'];
 
-	//投稿を検査する
-	$message = $db->prepare('SELECT * FROM posts WHERE id=?');
-	$message->execute(array($id));
-	$message = $message->fetch();
+	//いいね投稿を検査する
+	$goods = $db->prepare('SELECT * FROM good WHERE good_id=?');
+	$goods->execute(array($good_id));
+	$good= $goods->fetch();
 
-	if($message['member_id'] == $_SESSION['id']) {
-		//削除する
-		$del = $db->prepare('DELETE FROM posts WHERE id=?');
-		$del->execute(array($id));
+	if($good['member_id'] == $_SESSION['id']) {
+		//いいねを削除する
+		$del = $db->prepare('DELETE FROM good WHERE good_id=?');
+		$del->execute(array($good_id));
 	}
 }
 
