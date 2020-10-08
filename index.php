@@ -220,23 +220,23 @@ $originalRtCounts = $db->prepare('SELECT COUNT(rt_post_id) AS ortcnt FROM posts 
 						if($post['rt_post_id'] > 0){
 							if(($_SESSION['id'] ?? FALSE) == ($post['rt_member_id'] ?? FALSE)): 
 								// リツイート投稿かつ自分がリツイートしたもの(削除する) ?> 
-								<a style="color:#F33;" href="＃">リツイート削除: </a>
+								<a style="color:#F33;" href="rt_delete.php?rt_id=<?php echo h($rtSearch['id']); ?>">リツイート削除: </a>
 							<?php elseif($rtSearch['id'] ?? FALSE):
 								//リツイート投稿かつ自分以外がリツイートしたもののうち、自分がリツイート済みのもの ?>
-								<a style="color:#F33;" href="＃">リツイート削除: </a>
+								<a style="color:#F33;" href="rt_delete.php?rt_id=<?php echo h($rtSearch['id']); ?>">リツイート削除: </a>
 							<?php else: 
 								//リツイート投稿かつ自分以外がリツイートしたもののうち、未リツイートのもの ?>
-								<a style="color:#106eb7;" href="#">リツイート追加:</a>
+								<a style="color:#106eb7;" href="rt_insert.php?post_id=<?php echo h($rtSearch['rt_post_id']); ?>">リツイート追加:</a>
 								
 							<?php endif;
 							
 						} else {
 							if($originalRtSearch['id'] ?? FALSE): 
 								// オリジナル投稿かつ自分がリツイート済みのもの ?> 
-								<a style="color:#F33;" href="#">リツイート削除:</a>
+								<a style="color:#F33;" href="rt_delete.php?rt_id=<?php echo h($originalRtSearch['id']); ?>">リツイート削除:</a>
 							<?php else: 
 								//オリジナル投稿かつ未リツイートのもの ?>
-								<a style="color:#106eb7;" href="#">リツイート追加:</a>
+								<a style="color:#106eb7;" href="rt_insert.php?post_id=<?php echo h($post['id']); ?>">リツイート追加:</a>
 								
 							<?php endif;
 						}
