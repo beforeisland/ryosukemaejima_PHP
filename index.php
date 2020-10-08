@@ -81,9 +81,10 @@ $goodCounts = $db->prepare('SELECT COUNT(post_id) AS goodcnt FROM good WHERE pos
 //リツイート投稿に表示するいいね数の取得
 $rtGoodCounts = $db->prepare('SELECT COUNT(post_id) AS rtgoodcnt FROM good WHERE post_id=?');
 
-
+//リツイート投稿を特定する
 $rtSearches = $db->prepare('SELECT p.* FROM posts p WHERE p.rt_post_id=? AND p.rt_member_id=?');
 
+//リツイート元投稿を特定する
 $originalRtSearches = $db->prepare('SELECT p.* FROM posts p WHERE p.rt_post_id=? AND p.rt_member_id=?');
 
 //リツイート投稿のリツイート者名の取得
@@ -116,17 +117,15 @@ $originalRtCounts = $db->prepare('SELECT COUNT(rt_post_id) AS ortcnt FROM posts 
             <h1>ひとこと掲示板</h1>
         </div>
         <div id="content">
-			<div style="text-align: right">
-				<a href="logout.php">ログアウト</a>
-			</div>
+            <div style="text-align: right">
+                <a href="logout.php">ログアウト</a>
+            </div>
             <form action="" method="post">
                 <dl>
                     <dt><?php echo h($member['name']); ?>さん、メッセージをどうぞ</dt>
                     <dd>
-                        <textarea name="message" cols="50"
-                            rows="5"><?php echo h($message ?? FALSE); ?></textarea>
-                        <input type="hidden" name="reply_post_id"
-                            value="<?php echo h($_REQUEST['res']); ?>">
+                        <textarea name="message" cols="50" rows="5"><?php echo h($message ?? FALSE); ?></textarea>
+                        <input type="hidden" name="reply_post_id" value="<?php echo h($_REQUEST['res']); ?>">
                     </dd>
                 </dl>
                 <div>
@@ -139,17 +138,17 @@ $originalRtCounts = $db->prepare('SELECT COUNT(rt_post_id) AS ortcnt FROM posts 
 			?>
             <div class="msg">
 
-				<?php 
+                <?php 
 				$rtMembers->execute(array($post['id']));
 				$rtMember= $rtMembers->fetch();
 				//リツイート投稿者の表示
 				if($post['rt_post_id'] > 0):
 				?>
-					<p><?php echo h($rtMember['name']); ?>さんがリツイート</p>
-				<?php endif; ?>
+                <p><?php echo h($rtMember['name']); ?>さんがリツイート</p>
+                <?php endif; ?>
 
-                <img src="member_picture/<?php echo h($post['picture']); ?>" width="48"
-                    height="48" alt="<?php echo h($post['name']); ?>">
+                <img src="member_picture/<?php echo h($post['picture']); ?>" width="48" height="48"
+                    alt="<?php echo h($post['name']); ?>">
                 <p>
                     <?php echo makeLink(h($post['message'])); ?>
                     <span class="name">(<?php echo h($post['name']); ?>)</span>
@@ -157,16 +156,16 @@ $originalRtCounts = $db->prepare('SELECT COUNT(rt_post_id) AS ortcnt FROM posts 
                 </p>
                 <p class="day">
                     <a href="view.php?id=<?php echo h($post['id']); ?>"><?php echo h($post['created']); ?></a>
-					<?php if($post['reply_post_id'] > 0): ?>
+                    <?php if($post['reply_post_id'] > 0): ?>
 
-					<a href="view.php?id=<?php echo h($post['reply_post_id']); ?>">返信元のメッセージ</a>
-					<?php endif; ?>
-					<?php if($_SESSION['id'] == $post['member_id']): ?>
-					[<a href="delete.php?id=<?php echo h($post['id']); ?>" style="color:#F33;">削除</a>]
-					<?php endif; ?>
+                    <a href="view.php?id=<?php echo h($post['reply_post_id']); ?>">返信元のメッセージ</a>
+                    <?php endif; ?>
+                    <?php if($_SESSION['id'] == $post['member_id']): ?>
+                    [<a href="delete.php?id=<?php echo h($post['id']); ?>" style="color:#F33;">削除</a>]
+                    <?php endif; ?>
                 </p>
-				<span>
-						<?php 
+                <span>
+                    <?php 
 						$goods->execute(array($post['id'], $_SESSION['id']));
 						$good = $goods->fetch();
 
@@ -176,24 +175,26 @@ $originalRtCounts = $db->prepare('SELECT COUNT(rt_post_id) AS ortcnt FROM posts 
 						
 						if($post['rt_post_id'] > 0){
 							if((($_SESSION['id'] ?? FALSE) == ($rtGood['member_id'] ?? FALSE)) && (($rtGood['post_id'] ?? FALSE) == ($post['rt_post_id'] ?? FALSE))): 
-								// リツイート元投稿に自分のいいねがあるかどうか確認「ログイン者か否か、そのリツイート元投稿にいいねが存在しているか」条件文 ?> 
-								<a style="color:#F33;" href="good_delete.php?good_id=<?php echo h($rtGood['good_id']); ?>">いいね削除:</a>
-							<?php else: ?>
-								<a style="color:#106eb7;" href="good_insert.php?post_id=<?php echo h($post['rt_post_id']); ?>">いいね追加:</a>
-							<?php endif;
+								// リツイート元投稿に自分のいいねがあるかどうか確認「ログイン者か否か、そのリツイート元投稿にいいねが存在しているか」条件文 ?>
+                    <a style="color:#F33;"
+                        href="good_delete.php?good_id=<?php echo h($rtGood['good_id']); ?>">いいね削除:</a>
+                    <?php else: ?>
+                    <a style="color:#106eb7;"
+                        href="good_insert.php?post_id=<?php echo h($post['rt_post_id']); ?>">いいね追加:</a>
+                    <?php endif;
 							
 						} else {
 							if((($_SESSION['id'] ?? FALSE) == ($good['member_id'] ?? FALSE)) && (($good['post_id'] ?? FALSE) == ($post['id'] ?? FALSE))): 
-								// 自分のいいねがあるかどうか確認「ログイン者か否か、その投稿にいいねが存在しているか」条件文 ?> 
-								<a style="color:#F33;" href="good_delete.php?good_id=<?php echo h($good['good_id']); ?>">いいね削除:</a>
-							<?php else: ?>
-								<a style="color:#106eb7;" href="good_insert.php?post_id=<?php echo h($post['id']); ?>">いいね追加:</a>
-							<?php endif;
+								// 自分のいいねがあるかどうか確認「ログイン者か否か、その投稿にいいねが存在しているか」条件文 ?>
+                    <a style="color:#F33;" href="good_delete.php?good_id=<?php echo h($good['good_id']); ?>">いいね削除:</a>
+                    <?php else: ?>
+                    <a style="color:#106eb7;" href="good_insert.php?post_id=<?php echo h($post['id']); ?>">いいね追加:</a>
+                    <?php endif;
 						}
 						?>
 
-						
-						<?php
+
+                    <?php
 						//いいね数カウント
 						$goodCounts->execute(array($post['id']));
 						$goodCount = $goodCounts->fetch();
@@ -207,10 +208,10 @@ $originalRtCounts = $db->prepare('SELECT COUNT(rt_post_id) AS ortcnt FROM posts 
 						} else {
 							echo $goodCount['goodcnt'];
 						}
-					?> 
-				</span>
-				<span>
-				<?php 	
+					?>
+                </span>
+                <span>
+                    <?php 	
 					$rtSearches->execute(array($post['rt_post_id'], $_SESSION['id']));
 					$rtSearch = $rtSearches->fetch();
 
@@ -219,29 +220,31 @@ $originalRtCounts = $db->prepare('SELECT COUNT(rt_post_id) AS ortcnt FROM posts 
 
 						if($post['rt_post_id'] > 0){
 							if(($_SESSION['id'] ?? FALSE) == ($post['rt_member_id'] ?? FALSE)): 
-								// リツイート投稿かつ自分がリツイートしたもの(削除する) ?> 
-								<a style="color:#F33;" href="rt_delete.php?rt_id=<?php echo h($rtSearch['id']); ?>">リツイート削除: </a>
-							<?php elseif($rtSearch['id'] ?? FALSE):
+								// リツイート投稿かつ自分がリツイートしたもの(削除する) ?>
+                    <a style="color:#F33;" href="rt_delete.php?rt_id=<?php echo h($rtSearch['id']); ?>">リツイート削除: </a>
+                    <?php elseif($rtSearch['id'] ?? FALSE):
 								//リツイート投稿かつ自分以外がリツイートしたもののうち、自分がリツイート済みのもの ?>
-								<a style="color:#F33;" href="rt_delete.php?rt_id=<?php echo h($rtSearch['id']); ?>">リツイート削除: </a>
-							<?php else: 
+                    <a style="color:#F33;" href="rt_delete.php?rt_id=<?php echo h($rtSearch['id']); ?>">リツイート削除: </a>
+                    <?php else: 
 								//リツイート投稿かつ自分以外がリツイートしたもののうち、未リツイートのもの ?>
-								<a style="color:#106eb7;" href="rt_insert.php?post_id=<?php echo h($rtSearch['rt_post_id']); ?>">リツイート追加:</a>
-								
-							<?php endif;
+                    <a style="color:#106eb7;"
+                        href="rt_insert.php?post_id=<?php echo h($post['rt_post_id']); ?>">リツイート追加:</a>
+						
+                    <?php endif;
 							
 						} else {
 							if($originalRtSearch['id'] ?? FALSE): 
-								// オリジナル投稿かつ自分がリツイート済みのもの ?> 
-								<a style="color:#F33;" href="rt_delete.php?rt_id=<?php echo h($originalRtSearch['id']); ?>">リツイート削除:</a>
-							<?php else: 
+								// オリジナル投稿かつ自分がリツイート済みのもの ?>
+                    <a style="color:#F33;"
+                        href="rt_delete.php?rt_id=<?php echo h($originalRtSearch['id']); ?>">リツイート削除:</a>
+                    <?php else: 
 								//オリジナル投稿かつ未リツイートのもの ?>
-								<a style="color:#106eb7;" href="rt_insert.php?post_id=<?php echo h($post['id']); ?>">リツイート追加:</a>
-								
-							<?php endif;
+                    <a style="color:#106eb7;" href="rt_insert.php?post_id=<?php echo h($post['id']); ?>">リツイート追加:</a>
+
+                    <?php endif;
 						}
-						?>
-						<?php
+						 ?>
+                    <?php
 						//リツイート投稿に対するリツイート数取得
 						$rtCounts->execute(array($post['rt_post_id']));
 						$rtCount = $rtCounts->fetch();
@@ -258,27 +261,27 @@ $originalRtCounts = $db->prepare('SELECT COUNT(rt_post_id) AS ortcnt FROM posts 
 							echo $originalRtCount['ortcnt'];
 						}
 						?>
-				</span>
-				
+                </span>
+
             </div>
             <?php
 			endforeach;
 			?>
 
-			<ul class="paging">
-				<?php if($page > 1): ?>
-				<li><a href="index.php?page=<?php print($page - 1); ?>">前のページへ</a></li>
-				<?php else: ?>
-				<li>前のページへ</li>
-				<?php endif; ?>
+            <ul class="paging">
+                <?php if($page > 1): ?>
+                <li><a href="index.php?page=<?php print($page - 1); ?>">前のページへ</a></li>
+                <?php else: ?>
+                <li>前のページへ</li>
+                <?php endif; ?>
 
-				<?php if($page < $maxPage): ?>
-				<li><a href="index.php?page=<?php print($page + 1); ?>">次のページへ</a></li>
-				<?php else: ?>
-				<li>次のページへ</li>
-				<?php endif; ?>
+                <?php if($page < $maxPage): ?>
+                <li><a href="index.php?page=<?php print($page + 1); ?>">次のページへ</a></li>
+                <?php else: ?>
+                <li>次のページへ</li>
+                <?php endif; ?>
 
-			</ul>
+            </ul>
 
         </div>
 
