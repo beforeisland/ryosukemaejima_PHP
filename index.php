@@ -72,8 +72,14 @@ function makeLink($value) {
 //いいねの取得
 $goods = $db->prepare('SELECT p.id, g.good_id, g.member_id, g.post_id FROM posts p, good g WHERE p.id=g.post_id AND p.id=? AND g.member_id=?');
 
+//リツイート投稿に対する元ツイートのいいねの取得
+$rtGoods = $db->prepare('SELECT p.id, g.good_id, g.member_id, g.post_id FROM posts p, good g WHERE p.id=g.post_id AND p.id=? AND g.member_id=?');
+
 //いいね数の取得
 $goodCounts = $db->prepare('SELECT COUNT(post_id) AS goodcnt FROM good WHERE post_id=?');
+
+//リツイート投稿に表示するいいね数の取得
+$rtGoodCounts = $db->prepare('SELECT COUNT(post_id) AS rtgoodcnt FROM good WHERE post_id=?');
 
 //リツイート投稿のリツイート者名の取得
 $rtMembers = $db->prepare('SELECT m.name, p.* FROM posts p LEFT JOIN members m ON p.rt_member_id=m.id AND p.id=?');
@@ -158,21 +164,44 @@ $originalRtCounts = $db->prepare('SELECT COUNT(rt_post_id) AS ortcnt FROM posts 
 						<?php 
 						$goods->execute(array($post['id'], $_SESSION['id']));
 						$good = $goods->fetch();
-						
-						if((($_SESSION['id'] ?? FALSE) == ($good['member_id'] ?? FALSE)) && (($good['post_id'] ?? FALSE) == ($post['id'] ?? FALSE))): 
-							// 「ログイン者か否か、その投稿にいいねが存在しているか」条件文 ?> 
-						
 
-							<a style="color:#F33;" href="good_delete.php?good_id=<?php echo h($good['good_id']); ?>">いいね:</a>
+						$rtGoods->execute(array($post['rt_post_id'], $_SESSION['id']));
+						$rtGood = $rtGoods->fetch();
+
 						
-						<?php else: ?>
-						<a style="color:#106eb7;" href="good_insert.php?post_id=<?php echo h($post['id']); ?>">いいね:</a>
-						<?php endif ?>
-					<?php
+						if($post['rt_post_id'] > 0){
+							if((($_SESSION['id'] ?? FALSE) == ($rtGood['member_id'] ?? FALSE)) && (($rtGood['post_id'] ?? FALSE) == ($post['rt_post_id'] ?? FALSE))): 
+								// 「ログイン者か否か、その投稿にいいねが存在しているか」条件文 ?> 
+								<a style="color:#F33;" href="good_delete.php?good_id=<?php echo h($rtGood['good_id']); ?>">いいね:</a>
+							<?php else: ?>
+								<a style="color:#106eb7;" href="good_insert.php?post_id=<?php echo h($post['rt_post_id']); ?>">いいね:</a>
+							<?php endif;
+							
+						} else {
+							if((($_SESSION['id'] ?? FALSE) == ($good['member_id'] ?? FALSE)) && (($good['post_id'] ?? FALSE) == ($post['id'] ?? FALSE))): 
+								// 「ログイン者か否か、その投稿にいいねが存在しているか」条件文 ?> 
+								<a style="color:#F33;" href="good_delete.php?good_id=<?php echo h($good['good_id']); ?>">いいね:</a>
+							<?php else: ?>
+								<a style="color:#106eb7;" href="good_insert.php?post_id=<?php echo h($post['id']); ?>">いいね:</a>
+							<?php endif;
+						}
+						?>
+
+						
+						<?php
 						//いいね数カウント
 						$goodCounts->execute(array($post['id']));
 						$goodCount = $goodCounts->fetch();
-						echo $goodCount['goodcnt'];
+						
+						//リツイート投稿に対するいいね数カウント
+						$rtGoodCounts->execute(array($post['rt_post_id']));
+						$rtGoodCount = $rtGoodCounts->fetch();
+						
+						if($post['rt_post_id'] > 0) {
+							echo $rtGoodCount['rtgoodcnt'];
+						} else {
+							echo $goodCount['goodcnt'];
+						}
 					?> 
 				</span>
 				<span>
