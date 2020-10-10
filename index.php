@@ -160,11 +160,15 @@ $originalRtCounts = $db->prepare('SELECT COUNT(rt_post_id) AS ortcnt FROM posts 
 
                     <a href="view.php?id=<?php echo h($post['reply_post_id']); ?>">返信元のメッセージ</a>
                     <?php endif; ?>
-                    <?php if($_SESSION['id'] == $post['member_id']): ?>
+                    <?php if($post['rt_post_id'] <= 0){ 
+                    if($_SESSION['id'] == $post['member_id']): ?>
                     [<a href="delete.php?id=<?php echo h($post['id']); ?>" style="color:#F33;">削除</a>]
-                    <?php endif; ?>
+                    <?php endif; 
+					}
+					?>
                 </p>
-                <span>
+                <div class="rt_iine" style="display: flex;">
+                    <div>
                         <?php 
 						$goods->execute(array($post['id'], $_SESSION['id']));
 						$good = $goods->fetch();
