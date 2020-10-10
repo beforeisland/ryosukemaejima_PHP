@@ -69,6 +69,7 @@ function makeLink($value) {
 	return mb_ereg_replace("(https?)(://[[:alnum:]\+\$\;\?\.%,!#~*/:@&=_-]+)", '<a href="\1\2">\1\2</a>', $value);
 }
 
+
 //いいねの取得
 $goods = $db->prepare('SELECT p.id, g.good_id, g.member_id, g.post_id FROM posts p, good g WHERE p.id=g.post_id AND p.id=? AND g.member_id=?');
 
@@ -147,6 +148,7 @@ $originalRtCounts = $db->prepare('SELECT COUNT(rt_post_id) AS ortcnt FROM posts 
                 <p><?php echo h($rtMember['name']); ?>さんがリツイート</p>
                 <?php endif; ?>
 
+				
                 <img src="member_picture/<?php echo h($post['picture']); ?>" width="48" height="48"
                     alt="<?php echo h($post['name']); ?>">
                 <p>
@@ -169,17 +171,17 @@ $originalRtCounts = $db->prepare('SELECT COUNT(rt_post_id) AS ortcnt FROM posts 
                 </p>
                 <div class="rt_iine" style="display: flex;">
                     <div>
-                        <?php 
+						<?php
+						//いいね機能の実装
 						$goods->execute(array($post['id'], $_SESSION['id']));
 						$good = $goods->fetch();
 
 						$rtGoods->execute(array($post['rt_post_id'], $_SESSION['id']));
 						$rtGood = $rtGoods->fetch();
 
-						
 						if($post['rt_post_id'] > 0){
 							if((($_SESSION['id'] ?? FALSE) == ($rtGood['member_id'] ?? FALSE)) && (($rtGood['post_id'] ?? FALSE) == ($post['rt_post_id'] ?? FALSE))): 
-								// リツイート元投稿に自分のいいねがあるかどうか確認「ログイン者か否か、そのリツイート元投稿にいいねが存在しているか」条件文 ?>
+							// リツイート元投稿に自分のいいねがあるかどうか確認「ログイン者か否か、そのリツイート元投稿にいいねが存在しているか」条件文?>
                         <a href="good_delete.php?good_id=<?php echo h($rtGood['good_id']); ?>"><img
                                 src="images/good_on_icon.png" width="20px" height="20px"></a>
                         <?php else: ?>
@@ -189,7 +191,7 @@ $originalRtCounts = $db->prepare('SELECT COUNT(rt_post_id) AS ortcnt FROM posts 
 							
 						} else {
 							if((($_SESSION['id'] ?? FALSE) == ($good['member_id'] ?? FALSE)) && (($good['post_id'] ?? FALSE) == ($post['id'] ?? FALSE))): 
-								// 自分のいいねがあるかどうか確認「ログイン者か否か、その投稿にいいねが存在しているか」条件文 ?>
+							// 自分のいいねがあるかどうか確認「ログイン者か否か、その投稿にいいねが存在しているか」条件文 ?>
                         <a href="good_delete.php?good_id=<?php echo h($good['good_id']); ?>"><img
                                 src="images/good_on_icon.png" width="20px" height="20px"></a>
                         <?php else: ?>
@@ -217,7 +219,8 @@ $originalRtCounts = $db->prepare('SELECT COUNT(rt_post_id) AS ortcnt FROM posts 
                     </div>
 
                     <div>
-                        <?php 	
+						<?php 
+						//リツイート機能の実装
 					$rtSearches->execute(array($post['rt_post_id'], $_SESSION['id']));
 					$rtSearch = $rtSearches->fetch();
 
