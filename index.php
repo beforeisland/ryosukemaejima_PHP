@@ -71,16 +71,16 @@ function makeLink($value) {
 
 
 //いいねの取得
-$goods = $db->prepare('SELECT p.id, g.good_id, g.member_id, g.post_id FROM posts p, good g WHERE p.id=g.post_id AND p.id=? AND g.member_id=?');
+$goods = $db->prepare('SELECT p.id, g.good_id, g.member_id, g.post_id FROM posts p, goods g WHERE p.id=g.post_id AND p.id=? AND g.member_id=?');
 
 //リツイート投稿に対する元ツイートのいいねの取得
-$rtGoods = $db->prepare('SELECT p.id, g.good_id, g.member_id, g.post_id FROM posts p, good g WHERE p.id=g.post_id AND p.id=? AND g.member_id=?');
+$rtGoods = $db->prepare('SELECT p.id, g.good_id, g.member_id, g.post_id FROM posts p, goods g WHERE p.id=g.post_id AND p.id=? AND g.member_id=?');
 
 //いいね数の取得
-$goodCounts = $db->prepare('SELECT COUNT(post_id) AS goodcnt FROM good WHERE post_id=?');
+$goodCounts = $db->prepare('SELECT COUNT(post_id) AS goodcnt FROM goods WHERE post_id=?');
 
 //リツイート投稿に表示するいいね数の取得
-$rtGoodCounts = $db->prepare('SELECT COUNT(post_id) AS rtgoodcnt FROM good WHERE post_id=?');
+$rtGoodCounts = $db->prepare('SELECT COUNT(post_id) AS rtgoodcnt FROM goods WHERE post_id=?');
 
 //リツイート投稿を特定する
 $rtSearches = $db->prepare('SELECT p.* FROM posts p WHERE p.rt_post_id=? AND p.rt_member_id=?');

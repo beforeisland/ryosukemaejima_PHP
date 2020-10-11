@@ -4,7 +4,7 @@ require('dbconnect.php');
 
 if (isset($_SESSION['id'])) {
     //いいねを追加する
-    $insert = $db->prepare('INSERT INTO good SET member_id=?, post_id=?, created=NOW()');
+    $insert = $db->prepare('INSERT INTO goods SET member_id=?, post_id=?, created=NOW()');
     $insert->execute(array(
         $_SESSION['id'],
         $_REQUEST['post_id']
