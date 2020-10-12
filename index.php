@@ -180,8 +180,8 @@ $originalRtCounts = $db->prepare('SELECT COUNT(rt_post_id) AS ortcnt FROM posts 
 						$rtGood = $rtGoods->fetch();
 
 						if($post['rt_post_id'] > 0){
-							if((($_SESSION['id'] ?? FALSE) == ($rtGood['member_id'] ?? FALSE)) && (($rtGood['post_id'] ?? FALSE) == ($post['rt_post_id'] ?? FALSE))): 
-							// リツイート元投稿に自分のいいねがあるかどうか確認「ログイン者か否か、そのリツイート元投稿にいいねが存在しているか」条件文?>
+							//if:リツイート元投稿に自分のいいねがあるかどうか確認「ログイン者か否か、そのリツイート元投稿にいいねが存在しているか」条件文
+							if((($_SESSION['id'] ?? FALSE) == ($rtGood['member_id'] ?? FALSE)) && (($rtGood['post_id'] ?? FALSE) == ($post['rt_post_id'] ?? FALSE))): ?>
                         <a href="good_delete.php?good_id=<?php echo h($rtGood['good_id']); ?>"><img
                                 src="images/good_on_icon.png" width="20px" height="20px"></a>
                         <?php else: ?>
@@ -190,8 +190,8 @@ $originalRtCounts = $db->prepare('SELECT COUNT(rt_post_id) AS ortcnt FROM posts 
                         <?php endif;
 							
 						} else {
-							if((($_SESSION['id'] ?? FALSE) == ($good['member_id'] ?? FALSE)) && (($good['post_id'] ?? FALSE) == ($post['id'] ?? FALSE))): 
-							// 自分のいいねがあるかどうか確認「ログイン者か否か、その投稿にいいねが存在しているか」条件文 ?>
+							//if:自分のいいねがあるかどうか確認「ログイン者か否か、その投稿にいいねが存在しているか」条件文 
+							if((($_SESSION['id'] ?? FALSE) == ($good['member_id'] ?? FALSE)) && (($good['post_id'] ?? FALSE) == ($post['id'] ?? FALSE))): ?>
                         <a href="good_delete.php?good_id=<?php echo h($good['good_id']); ?>"><img
                                 src="images/good_on_icon.png" width="20px" height="20px"></a>
                         <?php else: ?>
@@ -228,28 +228,28 @@ $originalRtCounts = $db->prepare('SELECT COUNT(rt_post_id) AS ortcnt FROM posts 
 					$originalRtSearch= $originalRtSearches->fetch();
 
 						if($post['rt_post_id'] > 0){
-							if(($_SESSION['id'] ?? FALSE) == ($post['rt_member_id'] ?? FALSE)): 
-								// リツイート投稿かつ自分がリツイートしたもの(削除する) ?>
+							//if:リツイート投稿かつ自分がリツイートしたもの(削除する) 
+							if(($_SESSION['id'] ?? FALSE) == ($post['rt_member_id'] ?? FALSE)): ?>
                         <a href="rt_delete.php?rt_id=<?php echo h($rtSearch['id']); ?>"><img src="images/rt_on_icon.png"
                                 width="20px" height="20px"></a>
-                        <?php elseif($rtSearch['id'] ?? FALSE):
-								//リツイート投稿かつ自分以外がリツイートしたもののうち、自分がリツイート済みのもの ?>
+						<?php //if:リツイート投稿かつ自分以外がリツイートしたもののうち、自分がリツイート済みのもの
+							elseif($rtSearch['id'] ?? FALSE): ?>
                         <a href="rt_delete.php?rt_id=<?php echo h($rtSearch['id']); ?>"><img src="images/rt_on_icon.png"
                                 width="20px" height="20px"></a>
-                        <?php else: 
-								//リツイート投稿かつ自分以外がリツイートしたもののうち、未リツイートのもの ?>
+						<?php //if:リツイート投稿かつ自分以外がリツイートしたもののうち、未リツイートのもの
+							else: ?>
                         <a href="rt_insert.php?post_id=<?php echo h($post['rt_post_id']); ?>"><img
                                 src="images/rt_off_icon.png" width="20px" height="20px"></a>
 
                         <?php endif;
 							
 						} else {
-							if($originalRtSearch['id'] ?? FALSE): 
-								// オリジナル投稿かつ自分がリツイート済みのもの ?>
+							//if:オリジナル投稿かつ自分がリツイート済みのもの
+							if($originalRtSearch['id'] ?? FALSE): ?>
                         <a href="rt_delete.php?rt_id=<?php echo h($originalRtSearch['id']); ?>"><img
                                 src="images/rt_on_icon.png" width="20px" height="20px"></a>
-                        <?php else: 
-								//オリジナル投稿かつ未リツイートのもの ?>
+						<?php //オリジナル投稿かつ未リツイートのもの 
+							else: ?>
                         <a href="rt_insert.php?post_id=<?php echo h($post['id']); ?>"><img src="images/rt_off_icon.png"
                                 width="20px" height="20px"></a>
 

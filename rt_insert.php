@@ -2,7 +2,8 @@
 session_start();
 require('dbconnect.php');
 
-if (isset($_SESSION['id'])) {
+//if:セッションに数値形式で値が保存されているか調査 
+if (is_numeric($_SESSION['id'])) {
     //リツイートを追加する
     $rtCopys = $db->prepare('SELECT * FROM posts WHERE id=?');
     $rtCopys->execute(array($_REQUEST['post_id']));
