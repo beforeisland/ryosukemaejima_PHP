@@ -14,7 +14,7 @@ if (is_numeric($_SESSION['id'])) {
 		$good= $goods->fetch();
 
 		//if:ログイン者がいいね投稿者と一致するか調査
-		if($good['member_id'] == $_SESSION['id']) {
+		if($good['member_id'] === $_SESSION['id']) {
 			//いいねを削除する
 			$del = $db->prepare('DELETE FROM goods WHERE good_id=?');
 			$del->execute(array($_REQUEST['good_id']));

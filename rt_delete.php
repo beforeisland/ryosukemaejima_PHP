@@ -14,7 +14,7 @@ if(is_numeric($_SESSION['id'])) {
         $rt= $rts->fetch();
 
         //if:ログイン者がリツイート投稿者と一致するか調査
-        if($rt['rt_member_id'] == $_SESSION['id']) {
+        if($rt['rt_member_id'] === $_SESSION['id']) {
             //リツイートを削除する
             $del = $db->prepare('DELETE FROM posts WHERE id=?');
             $del->execute(array($_REQUEST['rt_id']));

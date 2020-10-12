@@ -163,7 +163,7 @@ $originalRtCounts = $db->prepare('SELECT COUNT(rt_post_id) AS ortcnt FROM posts 
                     <a href="view.php?id=<?php echo h($post['reply_post_id']); ?>">返信元のメッセージ</a>
                     <?php endif; ?>
                     <?php if($post['rt_post_id'] <= 0){ 
-                    if($_SESSION['id'] == $post['member_id']): ?>
+                    if($_SESSION['id'] === $post['member_id']): ?>
                     [<a href="delete.php?id=<?php echo h($post['id']); ?>" style="color:#F33;">削除</a>]
                     <?php endif; 
 					}
@@ -181,7 +181,7 @@ $originalRtCounts = $db->prepare('SELECT COUNT(rt_post_id) AS ortcnt FROM posts 
 
 						if($post['rt_post_id'] > 0){
 							//if:リツイート元投稿に自分のいいねがあるかどうか確認「ログイン者か否か、そのリツイート元投稿にいいねが存在しているか」条件文
-							if((($_SESSION['id'] ?? FALSE) == ($rtGood['member_id'] ?? FALSE)) && (($rtGood['post_id'] ?? FALSE) == ($post['rt_post_id'] ?? FALSE))): ?>
+							if((($_SESSION['id'] ?? FALSE) === ($rtGood['member_id'] ?? FALSE)) && (($rtGood['post_id'] ?? FALSE) === ($post['rt_post_id'] ?? FALSE))): ?>
                         <a href="good_delete.php?good_id=<?php echo h($rtGood['good_id']); ?>"><img
                                 src="images/good_on_icon.png" width="20px" height="20px"></a>
                         <?php else: ?>
@@ -191,7 +191,7 @@ $originalRtCounts = $db->prepare('SELECT COUNT(rt_post_id) AS ortcnt FROM posts 
 							
 						} else {
 							//if:自分のいいねがあるかどうか確認「ログイン者か否か、その投稿にいいねが存在しているか」条件文 
-							if((($_SESSION['id'] ?? FALSE) == ($good['member_id'] ?? FALSE)) && (($good['post_id'] ?? FALSE) == ($post['id'] ?? FALSE))): ?>
+							if((($_SESSION['id'] ?? FALSE) === ($good['member_id'] ?? FALSE)) && (($good['post_id'] ?? FALSE) === ($post['id'] ?? FALSE))): ?>
                         <a href="good_delete.php?good_id=<?php echo h($good['good_id']); ?>"><img
                                 src="images/good_on_icon.png" width="20px" height="20px"></a>
                         <?php else: ?>
@@ -229,7 +229,7 @@ $originalRtCounts = $db->prepare('SELECT COUNT(rt_post_id) AS ortcnt FROM posts 
 
 						if($post['rt_post_id'] > 0){
 							//if:リツイート投稿かつ自分がリツイートしたもの(削除する) 
-							if(($_SESSION['id'] ?? FALSE) == ($post['rt_member_id'] ?? FALSE)): ?>
+							if(($_SESSION['id'] ?? FALSE) === ($post['rt_member_id'] ?? FALSE)): ?>
                         <a href="rt_delete.php?rt_id=<?php echo h($rtSearch['id']); ?>"><img src="images/rt_on_icon.png"
                                 width="20px" height="20px"></a>
 						<?php //if:リツイート投稿かつ自分以外がリツイートしたもののうち、自分がリツイート済みのもの
