@@ -32,4 +32,3 @@ if(is_numeric($_SESSION['id'])) {
 
 header('Location: index.php');
 exit();
-?>
