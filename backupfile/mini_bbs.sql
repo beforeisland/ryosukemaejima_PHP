@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- ホスト: localhost:3306
--- 生成日時: 2020 年 10 月 10 日 03:23
+-- 生成日時: 2020 年 10 月 14 日 15:55
 -- サーバのバージョン： 5.7.26
 -- PHP のバージョン: 7.4.2
 
@@ -23,10 +23,10 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- テーブルの構造 `good`
+-- テーブルの構造 `goods`
 --
 
-CREATE TABLE `good` (
+CREATE TABLE `goods` (
   `good_id` int(11) NOT NULL,
   `member_id` int(11) DEFAULT NULL,
   `post_id` int(11) DEFAULT NULL,
@@ -35,17 +35,17 @@ CREATE TABLE `good` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- テーブルのデータのダンプ `good`
+-- テーブルのデータのダンプ `goods`
 --
 
-INSERT INTO `good` (`good_id`, `member_id`, `post_id`, `created`, `modified`) VALUES
+INSERT INTO `goods` (`good_id`, `member_id`, `post_id`, `created`, `modified`) VALUES
 (2, 2, 17, '2020-10-06 21:26:20', '2020-10-06 12:26:20'),
 (4, 2, 18, '2020-10-06 22:11:57', '2020-10-06 13:11:57'),
 (6, 2, 15, '2020-10-06 23:37:37', '2020-10-06 14:37:37'),
 (9, 1, 16, '2020-10-07 21:35:33', '2020-10-07 12:35:33'),
 (13, 1, 21, '2020-10-08 00:00:39', '2020-10-07 15:00:39'),
-(17, 1, 18, '2020-10-08 22:23:46', '2020-10-08 13:23:46'),
-(22, 1, 19, '2020-10-10 12:00:48', '2020-10-10 03:00:48');
+(22, 1, 19, '2020-10-10 12:00:48', '2020-10-10 03:00:48'),
+(27, 1, 99, '2020-10-15 00:30:41', '2020-10-14 15:30:41');
 
 -- --------------------------------------------------------
 
@@ -111,18 +111,16 @@ INSERT INTO `posts` (`id`, `message`, `member_id`, `reply_post_id`, `rt_post_id`
 (17, 'いいね用', 1, 0, 0, 0, '2020-10-06 21:21:43', '2020-10-06 12:21:43'),
 (18, 'いいね用b', 2, 0, 0, 0, '2020-10-06 21:25:17', '2020-10-06 12:25:17'),
 (19, 'テストa', 1, 0, 0, 0, '2020-10-07 22:32:19', '2020-10-07 13:32:19'),
-(26, 'テストa', 1, NULL, 19, 2, '2020-10-09 00:55:54', '2020-10-08 15:55:54'),
-(28, 'テストa', 1, NULL, 19, 1, '2020-10-10 12:00:56', '2020-10-10 03:00:56'),
-(29, '8', 1, NULL, 14, 1, '2020-10-10 12:06:24', '2020-10-10 03:06:24');
+(26, 'テストa', 1, NULL, 19, 2, '2020-10-09 00:55:54', '2020-10-08 15:55:54');
 
 --
 -- ダンプしたテーブルのインデックス
 --
 
 --
--- テーブルのインデックス `good`
+-- テーブルのインデックス `goods`
 --
-ALTER TABLE `good`
+ALTER TABLE `goods`
   ADD PRIMARY KEY (`good_id`);
 
 --
@@ -142,10 +140,10 @@ ALTER TABLE `posts`
 --
 
 --
--- テーブルのAUTO_INCREMENT `good`
+-- テーブルのAUTO_INCREMENT `goods`
 --
-ALTER TABLE `good`
-  MODIFY `good_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+ALTER TABLE `goods`
+  MODIFY `good_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- テーブルのAUTO_INCREMENT `members`
@@ -157,7 +155,7 @@ ALTER TABLE `members`
 -- テーブルのAUTO_INCREMENT `posts`
 --
 ALTER TABLE `posts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
