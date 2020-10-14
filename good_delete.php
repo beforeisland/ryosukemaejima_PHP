@@ -20,6 +20,7 @@ if (is_numeric($_SESSION['id'])) {
             $del->execute(array($_REQUEST['good_id']));
         } else {
             echo 'error:ログイン者といいね投稿者が一致しません';
+            exit();
         }
     } else {
         echo 'error:URLパラメータが不正です';

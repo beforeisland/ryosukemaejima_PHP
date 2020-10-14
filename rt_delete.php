@@ -20,6 +20,7 @@ if (is_numeric($_SESSION['id'])) {
             $del->execute(array($_REQUEST['rt_id']));
         } else {
             echo 'error:ログイン者とリツイート投稿者と一致しません';
+            exit();
         }
     } else {
         echo 'error:URLパラメータが不正です';
