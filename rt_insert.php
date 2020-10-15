@@ -2,16 +2,16 @@
 session_start();
 require('dbconnect.php');
 
-////SQL:リツイート対象の投稿が存在するか探し出す
-$rtSearches = $db->prepare('SELECT * FROM posts WHERE id=?');
-$rtSearches->execute(array($_REQUEST['post_id']));
-$rtSearch = $rtSearches->fetch();
-
 //if:セッションに数値形式で値が保存されているか調査 
 if (is_numeric($_SESSION['id'])) {
 
     //if:リクエストにて受け取ったURLパラメータが数値形式で存在しているか調査
     if (is_numeric($_REQUEST['post_id'])) {
+
+        ////SQL:リツイート対象の投稿が存在するか探し出す
+        $rtSearches = $db->prepare('SELECT * FROM posts WHERE id=?');
+        $rtSearches->execute(array($_REQUEST['post_id']));
+        $rtSearch = $rtSearches->fetch();
 
         //if:リツイート対象の投稿が存在すればいいね追加
         if (isset($rtSearch['id'])) {

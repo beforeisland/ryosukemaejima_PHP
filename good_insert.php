@@ -2,16 +2,16 @@
 session_start();
 require('dbconnect.php');
 
-//SQL:いいね対象の投稿が存在するか探し出す
-$postSearches = $db->prepare('SELECT * FROM posts WHERE id=?');
-$postSearches->execute(array($_REQUEST['post_id']));
-$postSearch = $postSearches->fetch();
-
 //if:セッションに数値形式で値が保存されているか調査 
 if (is_numeric($_SESSION['id'])) {
 
     //if:リクエストにて受け取ったURLパラメータが数値形式で存在しているか調査
     if (is_numeric($_REQUEST['post_id'])) {
+
+        //SQL:いいね対象の投稿が存在するか探し出す
+        $postSearches = $db->prepare('SELECT * FROM posts WHERE id=?');
+        $postSearches->execute(array($_REQUEST['post_id']));
+        $postSearch = $postSearches->fetch();
 
         //if:いいね対象の投稿が存在すればいいね追加
         if (isset($postSearch['id'])) {
