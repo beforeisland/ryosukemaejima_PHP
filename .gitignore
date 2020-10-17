@@ -1,2 +1,3 @@
-member_picture/
+member_picture/*
+!.gitkeep
 
